@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#ffffff;stop-opacity:0" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#3B82F6" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGradient)" filter="url(#shadow)"/>
+
+  <!-- Shine Effect -->
+  <circle cx="256" cy="256" r="240" fill="url(#shineGradient)"/>
+
+  <!-- Letter G -->
+  <text x="256" y="320"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="280"
+        font-weight="bold"
+        fill="white"
+        text-anchor="middle">G</text>
+
+  <!-- Tax Document Icon (small) -->
+  <g transform="translate(340, 120) scale(0.8)">
+    <rect x="0" y="0" width="60" height="80" rx="6" fill="white" opacity="0.9"/>
+    <rect x="10" y="15" width="40" height="4" rx="2" fill="#3B82F6"/>
+    <rect x="10" y="25" width="30" height="4" rx="2" fill="#3B82F6" opacity="0.6"/>
+    <rect x="10" y="35" width="35" height="4" rx="2" fill="#3B82F6" opacity="0.6"/>
+    <rect x="10" y="50" width="20" height="20" rx="3" fill="#10B981"/>
+    <path d="M16 60 L24 68 L38 54" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Dollar Signs (decorative) -->
+  <text x="100" y="150" font-family="Arial" font-size="40" fill="white" opacity="0.3">$</text>
+  <text x="400" y="420" font-family="Arial" font-size="30" fill="white" opacity="0.2">$</text>
+</svg>
