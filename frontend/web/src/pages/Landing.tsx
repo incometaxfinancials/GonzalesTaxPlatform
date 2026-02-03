@@ -130,8 +130,27 @@ const VideoTestimonial = ({
     }
   };
 
+  // Auto-play on hover
+  const handleMouseEnter = () => {
+    if (videoRef.current && !isPlaying) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (videoRef.current && isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
   return (
-    <div className="relative group rounded-2xl overflow-hidden shadow-xl bg-gray-900">
+    <div
+      className="relative group rounded-2xl overflow-hidden shadow-xl bg-gray-900 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <div className="aspect-[9/16] relative">
         <video
           ref={videoRef}
@@ -181,11 +200,84 @@ const VideoTestimonial = ({
   );
 };
 
+// Animated Counter Component
+const AnimatedCounter = ({ target, suffix = '' }: { target: number; suffix?: string }) => {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const counterRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          let start = 0;
+          const duration = 2000;
+          const increment = target / (duration / 16);
+          const timer = setInterval(() => {
+            start += increment;
+            if (start >= target) {
+              setCount(target);
+              clearInterval(timer);
+            } else {
+              setCount(Math.floor(start));
+            }
+          }, 16);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (counterRef.current) {
+      observer.observe(counterRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [target, hasAnimated]);
+
+  return (
+    <div ref={counterRef}>
+      {count.toLocaleString()}{suffix}
+    </div>
+  );
+};
+
 // Main Video Reel Component
 const VideoReelSection = () => {
   const [activeVideo, setActiveVideo] = useState(0);
   const [isMainPlaying, setIsMainPlaying] = useState(false);
   const mainVideoRef = React.useRef<HTMLVideoElement>(null);
+  const sectionRef = React.useRef<HTMLDivElement>(null);
+
+  // Auto-play main video when scrolled into view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && mainVideoRef.current) {
+          mainVideoRef.current.play();
+          setIsMainPlaying(true);
+        } else if (mainVideoRef.current) {
+          mainVideoRef.current.pause();
+          setIsMainPlaying(false);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Auto-cycle through testimonial highlights
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveVideo((prev) => (prev + 1) % 4);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const testimonialVideos = [
     {
@@ -230,7 +322,7 @@ const VideoReelSection = () => {
   };
 
   return (
-    <section className="py-20 bg-white overflow-hidden">
+    <section ref={sectionRef} className="py-20 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -313,30 +405,60 @@ const VideoReelSection = () => {
         {/* Video Testimonials Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {testimonialVideos.map((video, index) => (
-            <VideoTestimonial
+            <div
               key={index}
-              videoUrl={video.videoUrl}
-              posterUrl={video.posterUrl}
-              name={video.name}
-              title={video.title}
-              quote={video.quote}
+              className={`transition-all duration-500 ${activeVideo === index ? 'ring-4 ring-green-500 ring-offset-2 rounded-2xl' : ''}`}
+            >
+              <VideoTestimonial
+                videoUrl={video.videoUrl}
+                posterUrl={video.posterUrl}
+                name={video.name}
+                title={video.title}
+                quote={video.quote}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Auto-cycle indicators */}
+        <div className="flex justify-center gap-2 mt-6">
+          {testimonialVideos.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setActiveVideo(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                activeVideo === index ? 'bg-green-500 w-8' : 'bg-gray-300 hover:bg-gray-400'
+              }`}
             />
           ))}
         </div>
 
-        {/* Stats Bar */}
+        {/* Stats Bar with Animated Counters */}
         <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { value: '50K+', label: 'Happy Clients' },
-            { value: '$8,059', label: 'Avg. Refund' },
-            { value: '99.9%', label: 'Accuracy' },
-            { value: '4.9★', label: 'Rating' }
-          ].map((stat, index) => (
-            <div key={index} className="text-center p-4 bg-gray-50 rounded-xl">
-              <p className="text-2xl md:text-3xl font-bold" style={{ color: '#1e3a5f' }}>{stat.value}</p>
-              <p className="text-sm text-gray-600">{stat.label}</p>
-            </div>
-          ))}
+          <div className="text-center p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-lg transform hover:scale-105 transition-all">
+            <p className="text-2xl md:text-3xl font-bold" style={{ color: '#1e3a5f' }}>
+              <AnimatedCounter target={50000} suffix="+" />
+            </p>
+            <p className="text-sm text-gray-600 mt-1">Happy Clients</p>
+          </div>
+          <div className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl shadow-lg transform hover:scale-105 transition-all">
+            <p className="text-2xl md:text-3xl font-bold text-green-600">
+              $<AnimatedCounter target={8059} />
+            </p>
+            <p className="text-sm text-gray-600 mt-1">Avg. Refund</p>
+          </div>
+          <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-lg transform hover:scale-105 transition-all">
+            <p className="text-2xl md:text-3xl font-bold" style={{ color: '#1e3a5f' }}>
+              <AnimatedCounter target={99} suffix=".9%" />
+            </p>
+            <p className="text-sm text-gray-600 mt-1">Accuracy</p>
+          </div>
+          <div className="text-center p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl shadow-lg transform hover:scale-105 transition-all">
+            <p className="text-2xl md:text-3xl font-bold text-yellow-600">
+              <AnimatedCounter target={4} suffix=".9★" />
+            </p>
+            <p className="text-sm text-gray-600 mt-1">Rating</p>
+          </div>
         </div>
       </div>
     </section>

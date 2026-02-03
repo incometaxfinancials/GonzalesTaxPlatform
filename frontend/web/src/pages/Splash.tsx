@@ -1,19 +1,31 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { SkipForward, Volume2 } from 'lucide-react';
 
 export default function Splash() {
   const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
   const [loadingText, setLoadingText] = useState('Initializing...');
   const [fadeOut, setFadeOut] = useState(false);
+  const [canSkip, setCanSkip] = useState(false);
+
+  const skipToApp = () => {
+    setFadeOut(true);
+    setTimeout(() => {
+      navigate('/home');
+    }, 300);
+  };
 
   useEffect(() => {
+    // Enable skip after 1 second
+    const skipTimer = setTimeout(() => setCanSkip(true), 1000);
+
     const loadingSteps = [
       { progress: 15, text: 'Loading tax engine...' },
       { progress: 30, text: 'Connecting to IRS MeF...' },
       { progress: 50, text: 'Initializing security protocols...' },
       { progress: 70, text: 'Loading OBBBA provisions...' },
-      { progress: 85, text: 'Preparing your dashboard...' },
+      { progress: 85, text: 'Preparing your experience...' },
       { progress: 100, text: 'Welcome to ITF!' },
     ];
 
@@ -29,13 +41,16 @@ export default function Splash() {
         setTimeout(() => {
           setFadeOut(true);
           setTimeout(() => {
-            navigate('/dashboard');
+            navigate('/home');
           }, 500);
         }, 500);
       }
-    }, 400);
+    }, 350);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(skipTimer);
+    };
   }, [navigate]);
 
   return (
@@ -164,6 +179,17 @@ export default function Splash() {
           </span>
         </div>
       </div>
+
+      {/* Skip Button */}
+      {canSkip && (
+        <button
+          onClick={skipToApp}
+          className="absolute top-6 right-6 flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white rounded-full shadow-lg text-gray-700 text-sm font-medium transition-all hover:scale-105"
+        >
+          <SkipForward className="w-4 h-4" />
+          Skip Intro
+        </button>
+      )}
 
       {/* Footer */}
       <div className="absolute bottom-8 text-center">
