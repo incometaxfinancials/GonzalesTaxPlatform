@@ -114,38 +114,78 @@ const ITFCommercialVideo = ({
   const [currentLine, setCurrentLine] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [voicesLoaded, setVoicesLoaded] = useState(false);
 
-  // Auto-advance script lines
+  // Load voices on mount
   useEffect(() => {
-    if (!isPlaying) return;
-    const interval = setInterval(() => {
-      setCurrentLine((prev) => (prev + 1) % script.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [isPlaying, script.length]);
+    const loadVoices = () => {
+      const voices = window.speechSynthesis?.getVoices();
+      if (voices && voices.length > 0) {
+        setVoicesLoaded(true);
+      }
+    };
+
+    loadVoices();
+    window.speechSynthesis?.addEventListener('voiceschanged', loadVoices);
+
+    return () => {
+      window.speechSynthesis?.removeEventListener('voiceschanged', loadVoices);
+      window.speechSynthesis?.cancel();
+    };
+  }, []);
 
   // Text-to-speech for voice
-  const speak = (text: string) => {
-    if ('speechSynthesis' in window && !isMuted) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
-      utterance.volume = 1;
-      window.speechSynthesis.speak(utterance);
-    }
-  };
+  const speakText = React.useCallback((text: string) => {
+    if (!('speechSynthesis' in window)) return;
 
-  useEffect(() => {
-    if (isPlaying && !isMuted) {
-      speak(script[currentLine]);
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+
+    // Try to find a good English voice
+    const englishVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Female'))
+      || voices.find(v => v.lang.startsWith('en'))
+      || voices[0];
+
+    if (englishVoice) {
+      utterance.voice = englishVoice;
     }
-  }, [currentLine, isPlaying, isMuted]);
+
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    window.speechSynthesis.speak(utterance);
+  }, []);
+
+  // Auto-advance script lines and speak
+  useEffect(() => {
+    if (!isPlaying) return;
+
+    // Speak current line when playing starts or line changes
+    if (!isMuted) {
+      speakText(script[currentLine]);
+    }
+
+    const interval = setInterval(() => {
+      setCurrentLine((prev) => {
+        const nextLine = (prev + 1) % script.length;
+        return nextLine;
+      });
+    }, 4000); // 4 seconds per line for better pacing
+
+    return () => clearInterval(interval);
+  }, [isPlaying, currentLine, isMuted, script, speakText]);
 
   const togglePlay = () => {
     if (!isPlaying) {
       setIsPlaying(true);
-      if (!isMuted) speak(script[0]);
+      setCurrentLine(0);
+      if (!isMuted) {
+        // Small delay to ensure state is set
+        setTimeout(() => speakText(script[0]), 100);
+      }
     } else {
       setIsPlaying(false);
       window.speechSynthesis?.cancel();
@@ -156,6 +196,11 @@ const ITFCommercialVideo = ({
     e.stopPropagation();
     if (!isMuted) {
       window.speechSynthesis?.cancel();
+    } else {
+      // Unmuting - speak current line
+      if (isPlaying) {
+        speakText(script[currentLine]);
+      }
     }
     setIsMuted(!isMuted);
   };
