@@ -17,6 +17,7 @@ import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import TaxReturn from './pages/TaxReturn';
 import QuickCalc from './pages/QuickCalc';
+import TaxCalculator from './pages/TaxCalculator';
 import Documents from './pages/Documents';
 import Optimizer from './pages/Optimizer';
 import Login from './pages/Login';
@@ -43,6 +44,7 @@ function App() {
 
             {/* Public Quick Calculator */}
             <Route path="/quick-calc" element={<QuickCalc />} />
+            <Route path="/calculator" element={<TaxCalculator />} />
 
             {/* Auth Routes */}
             <Route element={<AuthLayout />}>

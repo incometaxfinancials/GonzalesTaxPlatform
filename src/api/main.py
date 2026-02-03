@@ -13,7 +13,7 @@ import logging
 import time
 from typing import Callable
 
-from .routers import auth, returns, calculations, documents, efile, users, optimizer
+from .routers import auth, returns, calculations, documents, efile, users, optimizer, mef
 from ..core.config import get_settings, Environment
 
 
@@ -211,6 +211,12 @@ def configure_routers(app: FastAPI):
         efile.router,
         prefix="/api/v1/efile",
         tags=["E-File"]
+    )
+
+    app.include_router(
+        mef.router,
+        prefix="/api/v1/mef",
+        tags=["IRS MeF E-File"]
     )
 
     # Health check endpoint
