@@ -13,6 +13,7 @@ import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
 
 // Pages
+import Splash from './pages/Splash';
 import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import TaxReturn from './pages/TaxReturn';
@@ -39,8 +40,11 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
+            {/* Splash/Loading Screen - Entry Point */}
+            <Route path="/" element={<Splash />} />
+
             {/* Public Landing Page */}
-            <Route path="/" element={<Landing />} />
+            <Route path="/home" element={<Landing />} />
 
             {/* Public Quick Calculator */}
             <Route path="/quick-calc" element={<QuickCalc />} />

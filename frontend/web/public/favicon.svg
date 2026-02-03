@@ -1,10 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#3B82F6"/>
-      <stop offset="100%" style="stop-color:#8B5CF6"/>
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="8" fill="url(#grad)"/>
-  <text x="16" y="24" font-family="Arial" font-size="22" font-weight="bold" fill="white" text-anchor="middle">G</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background -->
+  <rect width="64" height="64" rx="12" fill="white"/>
+
+  <!-- Letter I -->
+  <path d="M10 18 L10 46 L18 46 L18 18 Z" fill="#1e3a5f"/>
+
+  <!-- Letter T base -->
+  <path d="M22 18 L38 18 L38 24 L33 24 L33 46 L27 46 L27 24 L22 24 Z" fill="#1e3a5f"/>
+
+  <!-- Green Checkmark integrated with T -->
+  <path d="M24 26 L29 33 L42 16" stroke="#4CAF50" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Letter F -->
+  <path d="M44 18 L56 18 L56 24 L50 24 L50 29 L54 29 L54 35 L50 35 L50 46 L44 46 Z" fill="#1e3a5f"/>
+
+  <!-- Bottom swoosh - green -->
+  <path d="M6 48 Q32 58 58 48" stroke="#4CAF50" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+  <!-- Bottom swoosh - blue -->
+  <path d="M8 52 Q32 60 56 52" stroke="#1e3a5f" stroke-width="3" fill="none" stroke-linecap="round"/>
 </svg>

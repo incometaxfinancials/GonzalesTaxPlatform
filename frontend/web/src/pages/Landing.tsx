@@ -1,8 +1,6 @@
 /**
- * GONZALES TAX PLATFORM - Landing Page
- * Agent Xiomara - Frontend/UX Master
- *
- * Beautiful landing page with hero section and smooth transition to dashboard.
+ * ITF - Income. Tax. Financials - Landing Page
+ * Powered by Gonzales Tax Platform
  */
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -12,18 +10,42 @@ import {
   ChevronDown, Play
 } from 'lucide-react';
 
-// Logo Component
-const Logo = ({ size = 64 }: { size?: number }) => (
-  <svg viewBox="0 0 512 512" width={size} height={size}>
-    <defs>
-      <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#3B82F6" />
-        <stop offset="100%" stopColor="#8B5CF6" />
-      </linearGradient>
-    </defs>
-    <circle cx="256" cy="256" r="240" fill="url(#logoGrad)" />
-    <text x="256" y="320" fontFamily="Arial, sans-serif" fontSize="280" fontWeight="bold" fill="white" textAnchor="middle">G</text>
-  </svg>
+// ITF Logo Component
+const ITFLogo = ({ size = 64, showText = true }: { size?: number; showText?: boolean }) => (
+  <div className="flex items-center gap-3">
+    <svg viewBox="0 0 120 80" width={size} height={size * 0.67}>
+      <defs>
+        <linearGradient id="itfBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#2c4a7c" />
+          <stop offset="100%" stopColor="#1e3a5f" />
+        </linearGradient>
+        <linearGradient id="itfGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#6BBF59" />
+          <stop offset="100%" stopColor="#4CAF50" />
+        </linearGradient>
+      </defs>
+      {/* Letter I */}
+      <rect x="10" y="15" width="14" height="45" rx="2" fill="url(#itfBlue)" />
+      {/* Letter T */}
+      <rect x="32" y="22" width="14" height="38" rx="2" fill="url(#itfBlue)" />
+      <rect x="26" y="15" width="26" height="12" rx="2" fill="url(#itfBlue)" />
+      {/* Checkmark */}
+      <path d="M28 30 L37 42 L58 12" stroke="url(#itfGreen)" strokeWidth="7" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Letter F */}
+      <rect x="65" y="15" width="14" height="45" rx="2" fill="url(#itfBlue)" />
+      <rect x="65" y="15" width="22" height="10" rx="2" fill="url(#itfBlue)" />
+      <rect x="65" y="32" width="18" height="8" rx="2" fill="url(#itfBlue)" />
+      {/* Swooshes */}
+      <ellipse cx="50" cy="67" rx="45" ry="9" fill="none" stroke="url(#itfGreen)" strokeWidth="3" />
+      <ellipse cx="50" cy="71" rx="38" ry="7" fill="none" stroke="url(#itfBlue)" strokeWidth="2" />
+    </svg>
+    {showText && (
+      <div className="hidden sm:block">
+        <div className="text-xs font-bold tracking-wider" style={{ color: '#1e3a5f' }}>INCOME. TAX.</div>
+        <div className="text-xs font-bold tracking-wider" style={{ color: '#1e3a5f' }}>FINANCIALS</div>
+      </div>
+    )}
+  </div>
 );
 
 // Feature Card Component
@@ -41,15 +63,15 @@ const FeatureCard = ({
   <div className={`
     p-6 rounded-2xl transition-all duration-300 hover:scale-105
     ${highlight
-      ? 'bg-gradient-to-br from-blue-600 to-purple-600 text-white shadow-xl shadow-blue-500/25'
+      ? 'bg-gradient-to-br from-[#1e3a5f] to-[#2c4a7c] text-white shadow-xl shadow-[#1e3a5f]/25'
       : 'bg-white shadow-lg hover:shadow-xl'
     }
   `}>
     <div className={`
       w-12 h-12 rounded-xl flex items-center justify-center mb-4
-      ${highlight ? 'bg-white/20' : 'bg-blue-100'}
+      ${highlight ? 'bg-white/20' : 'bg-[#e8f5e9]'}
     `}>
-      <Icon className={`w-6 h-6 ${highlight ? 'text-white' : 'text-blue-600'}`} />
+      <Icon className={`w-6 h-6 ${highlight ? 'text-white' : 'text-[#4CAF50]'}`} />
     </div>
     <h3 className={`text-xl font-bold mb-2 ${highlight ? 'text-white' : 'text-gray-900'}`}>
       {title}
@@ -63,7 +85,7 @@ const FeatureCard = ({
 // OBBBA Benefit Component
 const OBBBABenefit = ({ amount, title, description }: { amount: string; title: string; description: string }) => (
   <div className="flex items-start gap-4 p-4 bg-white/10 backdrop-blur rounded-xl">
-    <div className="text-2xl font-bold text-yellow-300">{amount}</div>
+    <div className="text-2xl font-bold" style={{ color: '#6BBF59' }}>{amount}</div>
     <div>
       <h4 className="font-semibold text-white">{title}</h4>
       <p className="text-sm text-blue-200">{description}</p>
@@ -81,7 +103,7 @@ const Testimonial = ({ quote, author, role, rating }: { quote: string; author: s
     </div>
     <p className="text-gray-700 mb-4">"{quote}"</p>
     <div className="flex items-center gap-3">
-      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+      <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style={{ background: 'linear-gradient(135deg, #1e3a5f, #4CAF50)' }}>
         {author[0]}
       </div>
       <div>
@@ -122,10 +144,7 @@ export default function Landing() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <Logo size={40} />
-              <span className="font-bold text-xl text-gray-900">Gonzales Tax</span>
-            </div>
+            <ITFLogo size={50} />
 
             <div className="hidden md:flex items-center gap-8">
               <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
@@ -134,7 +153,10 @@ export default function Landing() {
               <Link to="/login" className="text-gray-600 hover:text-gray-900 transition-colors">Sign In</Link>
               <Link
                 to="/register"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                style={{ backgroundColor: '#4CAF50' }}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#43a047'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#4CAF50'}
               >
                 Start Free
               </Link>
@@ -146,45 +168,48 @@ export default function Landing() {
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
         {/* Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-white" />
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-100/50 to-transparent" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #f0f7f0 0%, #e8f5e9 50%, #fff 100%)' }} />
+        <div className="absolute top-0 right-0 w-1/2 h-full" style={{ background: 'linear-gradient(to left, rgba(76,175,80,0.1), transparent)' }} />
 
         {/* Floating Elements */}
-        <div className="absolute top-40 left-10 w-20 h-20 bg-blue-400/20 rounded-full blur-2xl animate-pulse" />
-        <div className="absolute bottom-40 right-20 w-32 h-32 bg-purple-400/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-40 left-10 w-20 h-20 rounded-full blur-2xl animate-pulse" style={{ backgroundColor: 'rgba(76,175,80,0.2)' }} />
+        <div className="absolute bottom-40 right-20 w-32 h-32 rounded-full blur-3xl animate-pulse" style={{ backgroundColor: 'rgba(30,58,95,0.2)' }} />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Column - Text */}
             <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <div className="inline-flex items-center gap-2 text-white px-4 py-2 rounded-full text-sm font-medium mb-6" style={{ background: 'linear-gradient(90deg, #1e3a5f, #4CAF50)' }}>
                 <Sparkles className="w-4 h-4" />
                 New 2025 OBBBA Tax Savings Available
               </div>
 
               <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
-                File Your Taxes.
+                <span style={{ color: '#1e3a5f' }}>Income.</span>{' '}
+                <span style={{ color: '#4CAF50' }}>Tax.</span>{' '}
+                <span style={{ color: '#1e3a5f' }}>Financials.</span>
                 <br />
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Maximize Your Refund.
+                <span className="text-3xl lg:text-4xl text-gray-600 font-normal">
+                  Maximum Refunds, Guaranteed.
                 </span>
               </h1>
 
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                The AI-powered tax platform that finds every deduction you deserve.
+                Professional tax preparation powered by AI. We find every deduction you deserve.
                 With new OBBBA provisions, you could save thousands more this year.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Link
                   to="/register"
-                  className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg shadow-blue-500/30 transition-all hover:scale-105"
+                  className="inline-flex items-center justify-center gap-2 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transition-all hover:scale-105"
+                  style={{ backgroundColor: '#4CAF50', boxShadow: '0 10px 25px rgba(76,175,80,0.3)' }}
                 >
                   Start Filing Free <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
                   to="/quick-calc"
-                  className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-gray-200 transition-all hover:border-blue-300"
+                  className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-gray-200 transition-all hover:border-[#4CAF50]"
                 >
                   <Calculator className="w-5 h-5" /> Quick Estimate
                 </Link>
@@ -193,15 +218,15 @@ export default function Landing() {
               {/* Trust Badges */}
               <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500">
                 <div className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-green-500" />
-                  <span>IRS Authorized</span>
+                  <Shield className="w-5 h-5" style={{ color: '#4CAF50' }} />
+                  <span>IRS Authorized e-File</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <CheckCircle className="w-5 h-5" style={{ color: '#4CAF50' }} />
                   <span>100% Accuracy Guarantee</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-yellow-500" />
+                  <Zap className="w-5 h-5" style={{ color: '#f59e0b' }} />
                   <span>Fastest Refunds</span>
                 </div>
               </div>
@@ -213,7 +238,7 @@ export default function Landing() {
                 {/* Main Card */}
                 <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
                   <div className="text-center mb-8">
-                    <div className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                    <div className="text-6xl font-bold mb-2" style={{ background: 'linear-gradient(90deg, #1e3a5f, #4CAF50)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                       {stats[currentStat].value}
                     </div>
                     <p className="text-gray-500">{stats[currentStat].label}</p>
@@ -225,8 +250,9 @@ export default function Landing() {
                       <div
                         key={i}
                         className={`h-2 rounded-full transition-all duration-300 ${
-                          i === currentStat ? 'w-8 bg-blue-600' : 'w-2 bg-gray-200'
+                          i === currentStat ? 'w-8' : 'w-2 bg-gray-200'
                         }`}
+                        style={i === currentStat ? { backgroundColor: '#4CAF50' } : {}}
                       />
                     ))}
                   </div>
@@ -240,7 +266,7 @@ export default function Landing() {
                       'Senior Deduction ($6,000 for 65+)',
                     ].map((benefit, i) => (
                       <div key={i} className="flex items-center gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                        <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#4CAF50' }} />
                         <span className="text-gray-700">{benefit}</span>
                       </div>
                     ))}
@@ -248,7 +274,7 @@ export default function Landing() {
                 </div>
 
                 {/* Floating Badge */}
-                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full font-bold shadow-lg animate-bounce">
+                <div className="absolute -top-4 -right-4 text-white px-4 py-2 rounded-full font-bold shadow-lg animate-bounce" style={{ background: 'linear-gradient(90deg, #f59e0b, #ef4444)' }}>
                   NEW 2025!
                 </div>
               </div>
@@ -273,10 +299,10 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Everything You Need to File with Confidence
+              Professional Tax Solutions for Everyone
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Powered by AI and built by tax experts, Gonzales Tax makes filing easy, accurate, and maximized.
+              Powered by AI and built by tax experts, ITF makes filing easy, accurate, and maximized.
             </p>
           </div>
 
@@ -317,7 +343,7 @@ export default function Landing() {
       </section>
 
       {/* OBBBA Section */}
-      <section id="obbba" className="py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700">
+      <section id="obbba" className="py-20" style={{ background: 'linear-gradient(135deg, #1e3a5f 0%, #2c4a7c 50%, #1e3a5f 100%)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium mb-4">
@@ -328,7 +354,7 @@ export default function Landing() {
               New 2025 Tax Savings You Don't Want to Miss
             </h2>
             <p className="text-xl text-blue-200 max-w-2xl mx-auto">
-              The OBBBA introduces major tax benefits. Gonzales Tax automatically applies all eligible savings.
+              The OBBBA introduces major tax benefits. ITF automatically applies all eligible savings.
             </p>
           </div>
 
@@ -368,7 +394,8 @@ export default function Landing() {
           <div className="text-center mt-12">
             <Link
               to="/quick-calc"
-              className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-blue-50 transition-colors"
+              className="inline-flex items-center gap-2 bg-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-colors"
+              style={{ color: '#1e3a5f' }}
             >
               Calculate Your OBBBA Savings <ArrowRight className="w-5 h-5" />
             </Link>
@@ -381,10 +408,10 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Loved by Millions of Filers
+              Trusted by Thousands of Clients
             </h2>
             <p className="text-xl text-gray-600">
-              See why customers choose Gonzales Tax year after year
+              See why customers choose Income. Tax. Financials year after year
             </p>
           </div>
 
@@ -414,17 +441,18 @@ export default function Landing() {
       {/* CTA Section */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Logo size={80} />
+          <ITFLogo size={100} showText={false} />
           <h2 className="text-4xl font-bold text-gray-900 mt-6 mb-4">
             Ready to Maximize Your Refund?
           </h2>
           <p className="text-xl text-gray-600 mb-8">
-            Join millions who trust Gonzales Tax. File free, file smart, file now.
+            Join thousands who trust ITF. File professionally, file smart, file now.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/register"
-              className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transition-all hover:scale-105"
+              className="inline-flex items-center justify-center gap-2 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transition-all hover:scale-105"
+              style={{ backgroundColor: '#4CAF50' }}
             >
               Start Filing Free <ArrowRight className="w-5 h-5" />
             </Link>
@@ -439,15 +467,18 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
+      <footer className="py-12" style={{ backgroundColor: '#1e3a5f' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center gap-3 mb-4 md:mb-0">
-              <Logo size={32} />
-              <span className="font-bold text-white">Gonzales Tax</span>
+              <ITFLogo size={40} showText={false} />
+              <div>
+                <span className="font-bold text-white">Income. Tax. Financials</span>
+                <p className="text-xs text-gray-400">Powered by Gonzales Tax Platform</p>
+              </div>
             </div>
-            <p className="text-sm">
-              Built in solidarity with the Gonzales legacy. &copy; 2025 All rights reserved.
+            <p className="text-sm text-gray-400">
+              IRS Authorized e-File Provider | &copy; 2025 All rights reserved.
             </p>
           </div>
         </div>
