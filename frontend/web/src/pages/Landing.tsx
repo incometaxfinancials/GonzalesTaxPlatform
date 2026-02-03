@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRight, ArrowLeft, CheckCircle, Shield, Zap, DollarSign,
   Star, Users, FileText, Sparkles, Calculator,
-  ChevronDown, Play
+  ChevronDown, Play, Volume2, VolumeX, Pause
 } from 'lucide-react';
 
 // ITF Logo Component
@@ -92,6 +92,256 @@ const OBBBABenefit = ({ amount, title, description }: { amount: string; title: s
     </div>
   </div>
 );
+
+// Video Testimonial Component
+const VideoTestimonial = ({
+  videoUrl,
+  posterUrl,
+  name,
+  title,
+  quote
+}: {
+  videoUrl: string;
+  posterUrl: string;
+  name: string;
+  title: string;
+  quote: string;
+}) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  return (
+    <div className="relative group rounded-2xl overflow-hidden shadow-xl bg-gray-900">
+      <div className="aspect-[9/16] relative">
+        <video
+          ref={videoRef}
+          className="w-full h-full object-cover"
+          poster={posterUrl}
+          muted={isMuted}
+          loop
+          playsInline
+          onClick={togglePlay}
+        >
+          <source src={videoUrl} type="video/mp4" />
+        </video>
+
+        {/* Overlay Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+
+        {/* Play/Pause Button */}
+        <button
+          onClick={togglePlay}
+          className="absolute inset-0 flex items-center justify-center"
+        >
+          {!isPlaying && (
+            <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+              <Play className="w-8 h-8 text-[#1e3a5f] ml-1" fill="#1e3a5f" />
+            </div>
+          )}
+        </button>
+
+        {/* Mute Button */}
+        {isPlaying && (
+          <button
+            onClick={toggleMute}
+            className="absolute top-4 right-4 w-10 h-10 bg-black/50 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition"
+          >
+            {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+          </button>
+        )}
+
+        {/* Person Info */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+          <p className="font-bold text-lg">{name}</p>
+          <p className="text-sm text-gray-300">{title}</p>
+          <p className="text-sm mt-2 line-clamp-2 text-gray-200">"{quote}"</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Main Video Reel Component
+const VideoReelSection = () => {
+  const [activeVideo, setActiveVideo] = useState(0);
+  const [isMainPlaying, setIsMainPlaying] = useState(false);
+  const mainVideoRef = React.useRef<HTMLVideoElement>(null);
+
+  const testimonialVideos = [
+    {
+      videoUrl: 'https://videos.pexels.com/video-files/3252128/3252128-sd_640_360_30fps.mp4',
+      posterUrl: 'https://images.pexels.com/photos/3760263/pexels-photo-3760263.jpeg?auto=compress&cs=tinysrgb&w=400',
+      name: 'Jennifer Williams',
+      title: 'Small Business Owner',
+      quote: 'ITF saved me over $4,000 with the new OBBBA deductions. The process was so simple!'
+    },
+    {
+      videoUrl: 'https://videos.pexels.com/video-files/3209211/3209211-sd_640_360_25fps.mp4',
+      posterUrl: 'https://images.pexels.com/photos/3184357/pexels-photo-3184357.jpeg?auto=compress&cs=tinysrgb&w=400',
+      name: 'Marcus Thompson',
+      title: 'Restaurant Manager',
+      quote: 'No tax on my tips! I got my biggest refund ever thanks to ITF.'
+    },
+    {
+      videoUrl: 'https://videos.pexels.com/video-files/3195440/3195440-sd_640_360_25fps.mp4',
+      posterUrl: 'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=400',
+      name: 'Dr. Patricia Chen',
+      title: 'Healthcare Professional',
+      quote: 'Professional, secure, and accurate. ITF is the only tax platform I trust.'
+    },
+    {
+      videoUrl: 'https://videos.pexels.com/video-files/3252131/3252131-sd_640_360_30fps.mp4',
+      posterUrl: 'https://images.pexels.com/photos/3184405/pexels-photo-3184405.jpeg?auto=compress&cs=tinysrgb&w=400',
+      name: 'Robert Davis',
+      title: 'Retired Veteran',
+      quote: 'The senior deduction was a game-changer. ITF made retirement even better.'
+    }
+  ];
+
+  const toggleMainVideo = () => {
+    if (mainVideoRef.current) {
+      if (isMainPlaying) {
+        mainVideoRef.current.pause();
+      } else {
+        mainVideoRef.current.play();
+      }
+      setIsMainPlaying(!isMainPlaying);
+    }
+  };
+
+  return (
+    <section className="py-20 bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <Play className="w-4 h-4" fill="currentColor" />
+            Watch Real Stories
+          </div>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Meet the People We've Helped
+          </h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Real professionals sharing their experience with Income. Tax. Financials
+          </p>
+        </div>
+
+        {/* Main Video Feature */}
+        <div className="mb-12">
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-gray-900 max-w-4xl mx-auto">
+            <div className="aspect-video relative">
+              <video
+                ref={mainVideoRef}
+                className="w-full h-full object-cover"
+                poster="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                muted
+                loop
+                playsInline
+                onClick={toggleMainVideo}
+              >
+                <source src="https://videos.pexels.com/video-files/3129671/3129671-sd_640_360_30fps.mp4" type="video/mp4" />
+              </video>
+
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
+
+              {/* Play Button */}
+              <button
+                onClick={toggleMainVideo}
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                {!isMainPlaying && (
+                  <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform">
+                    <Play className="w-12 h-12 text-[#1e3a5f] ml-2" fill="#1e3a5f" />
+                  </div>
+                )}
+              </button>
+
+              {/* Video Info Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 p-8">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                    <img
+                      src="https://images.pexels.com/photos/3184405/pexels-photo-3184405.jpeg?auto=compress&cs=tinysrgb&w=100"
+                      alt="CEO"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="text-white">
+                    <p className="font-bold text-xl">Welcome to ITF</p>
+                    <p className="text-gray-300">See how we're changing tax preparation</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* ITF Badge */}
+              <div className="absolute top-6 left-6 bg-white/90 backdrop-blur px-4 py-2 rounded-full">
+                <p className="font-bold text-sm" style={{ color: '#1e3a5f' }}>
+                  Income<span style={{ color: '#4CAF50' }}>.</span> Tax<span style={{ color: '#4CAF50' }}>.</span> Financials
+                </p>
+              </div>
+
+              {/* Live Badge */}
+              <div className="absolute top-6 right-6 flex items-center gap-2 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                2025 OBBBA
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Video Testimonials Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          {testimonialVideos.map((video, index) => (
+            <VideoTestimonial
+              key={index}
+              videoUrl={video.videoUrl}
+              posterUrl={video.posterUrl}
+              name={video.name}
+              title={video.title}
+              quote={video.quote}
+            />
+          ))}
+        </div>
+
+        {/* Stats Bar */}
+        <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { value: '50K+', label: 'Happy Clients' },
+            { value: '$8,059', label: 'Avg. Refund' },
+            { value: '99.9%', label: 'Accuracy' },
+            { value: '4.9★', label: 'Rating' }
+          ].map((stat, index) => (
+            <div key={index} className="text-center p-4 bg-gray-50 rounded-xl">
+              <p className="text-2xl md:text-3xl font-bold" style={{ color: '#1e3a5f' }}>{stat.value}</p>
+              <p className="text-sm text-gray-600">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 // Testimonial Component
 const Testimonial = ({ quote, author, role, rating }: { quote: string; author: string; role: string; rating: number }) => (
@@ -410,6 +660,9 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Video Reel Section */}
+      <VideoReelSection />
 
       {/* Testimonials */}
       <section className="py-20 bg-gray-50">
