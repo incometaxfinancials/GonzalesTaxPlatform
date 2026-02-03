@@ -167,7 +167,7 @@ export default function Splash() {
 
       {/* Footer */}
       <div className="absolute bottom-8 text-center">
-        <p className="text-gray-400 text-xs">Powered by Gonzales Tax Platform</p>
+        <p className="text-gray-400 text-xs">Professional Tax Solutions</p>
         <p className="text-gray-400 text-xs mt-1">IRS Authorized e-File Provider</p>
       </div>
 

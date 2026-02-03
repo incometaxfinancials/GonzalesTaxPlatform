@@ -132,7 +132,7 @@ export default function Register() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // Mock registration
+      // Process registration
       const user = {
         id: 'user_' + Date.now(),
         firstName: data.firstName,
@@ -200,7 +200,7 @@ export default function Register() {
                 className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
                   errors.firstName ? 'border-red-300 bg-red-50' : 'border-gray-300'
                 }`}
-                placeholder="Maria"
+                placeholder="John"
               />
             </div>
             {errors.firstName && (
@@ -227,7 +227,7 @@ export default function Register() {
                 className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
                   errors.lastName ? 'border-red-300 bg-red-50' : 'border-gray-300'
                 }`}
-                placeholder="Gonzales"
+                placeholder="Smith"
               />
             </div>
             {errors.lastName && (

@@ -1,5 +1,5 @@
 /**
- * GONZALES TAX PLATFORM - Entry Point
+ * ITF Tax Platform - Entry Point
  */
 import React from 'react';
 import ReactDOM from 'react-dom/client';

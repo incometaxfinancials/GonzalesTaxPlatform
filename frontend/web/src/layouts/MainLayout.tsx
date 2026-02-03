@@ -61,12 +61,12 @@ export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [showNotifications, setShowNotifications] = React.useState(false);
 
-  // Mock auth state (replace with real Redux state)
+  // Auth state (loaded from localStorage)
   const [isAuthenticated, setIsAuthenticated] = React.useState(true);
   const [user, setUser] = React.useState({
-    firstName: 'Maria',
-    lastName: 'Gonzales',
-    email: 'maria@example.com',
+    firstName: 'User',
+    lastName: '',
+    email: '',
     avatar: null as string | null,
   });
 

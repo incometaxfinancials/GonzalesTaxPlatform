@@ -66,7 +66,7 @@ interface Notification {
   timestamp: Date;
 }
 
-// Mock initial data - would come from API in production
+// Default user profile
 const mockUser: UserProfile = {
   id: '1',
   firstName: 'Alex',

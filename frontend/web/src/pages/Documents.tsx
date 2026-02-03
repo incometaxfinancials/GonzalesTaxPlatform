@@ -29,7 +29,7 @@ interface Document {
   };
 }
 
-// Mock initial documents
+// Sample documents data
 const mockDocuments: Document[] = [
   {
     id: '1',

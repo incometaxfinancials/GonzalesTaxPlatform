@@ -1,6 +1,6 @@
 /**
- * GONZALES TAX PLATFORM - Redux Store
- * Agent Xiomara - Frontend/UX Master
+ * ITF Tax Platform - Redux Store
+ * Income. Tax. Financials.
  */
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 

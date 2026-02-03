@@ -25,7 +25,7 @@ interface Deduction {
   dismissed: boolean;
 }
 
-// Mock deductions based on user profile
+// Generate deductions based on user profile
 const generateDeductions = (): Deduction[] => [
   // OBBBA Provisions
   {

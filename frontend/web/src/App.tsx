@@ -1,6 +1,6 @@
 /**
- * GONZALES TAX PLATFORM - Main App Component
- * Agent Xiomara - Frontend/UX Master
+ * ITF Tax Platform - Main App Component
+ * Income. Tax. Financials.
  */
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';

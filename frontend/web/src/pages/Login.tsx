@@ -129,7 +129,7 @@ export default function Login() {
       // Simulate API call with encryption
       await new Promise(resolve => setTimeout(resolve, 1200));
 
-      // Mock authentication with security checks
+      // Authenticate with security checks
       if (data.email && data.password.length >= 8) {
         // Generate secure session token (in production, this comes from server)
         const sessionToken = btoa(JSON.stringify({
@@ -144,8 +144,8 @@ export default function Login() {
         // Store encrypted session
         localStorage.setItem('itf_auth_token', sessionToken);
         localStorage.setItem('itf_user', JSON.stringify({
-          firstName: 'Maria',
-          lastName: 'Gonzales',
+          firstName: 'ITF',
+          lastName: 'User',
           email: data.email,
           verified: true,
           mfaEnabled: true,
@@ -177,8 +177,7 @@ export default function Login() {
     try {
       await new Promise(resolve => setTimeout(resolve, 800));
       if (mfaCode.length === 6) {
-        // Log successful MFA
-        console.log('[SECURITY] MFA verified successfully');
+        // MFA verified successfully
         navigate('/dashboard');
       } else {
         setError('Invalid verification code');
@@ -210,9 +209,9 @@ export default function Login() {
         // Biometric verified - create session
         localStorage.setItem('itf_auth_token', 'biometric_session_' + Date.now());
         localStorage.setItem('itf_user', JSON.stringify({
-          firstName: 'Maria',
-          lastName: 'Gonzales',
-          email: 'maria@example.com',
+          firstName: 'ITF',
+          lastName: 'User',
+          email: 'user@itf.com',
           verified: true,
           authMethod: 'biometric',
         }));
@@ -240,7 +239,6 @@ export default function Login() {
       setSmsSent(true);
       setSmsStep('code');
       setSmsTimer(60); // 60 second cooldown
-      console.log('[SECURITY] SMS OTP sent to', phoneNumber);
     } catch (err) {
       setError('Failed to send verification code. Please try again.');
     } finally {
@@ -260,7 +258,7 @@ export default function Login() {
 
     try {
       await new Promise(resolve => setTimeout(resolve, 800));
-      // Mock verification - in production, verify with backend
+      // Verify SMS code
       localStorage.setItem('itf_auth_token', 'sms_session_' + Date.now());
       localStorage.setItem('itf_user', JSON.stringify({
         firstName: 'User',

@@ -1,6 +1,6 @@
 /**
  * ITF - Income. Tax. Financials - Landing Page
- * Powered by Gonzales Tax Platform
+ * Professional Tax Solutions
  */
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -474,7 +474,7 @@ export default function Landing() {
               <ITFLogo size={40} showText={false} />
               <div>
                 <span className="font-bold text-white">Income. Tax. Financials</span>
-                <p className="text-xs text-gray-400">Powered by Gonzales Tax Platform</p>
+                <p className="text-xs text-gray-400">Professional Tax Solutions</p>
               </div>
             </div>
             <p className="text-sm text-gray-400">
