@@ -210,7 +210,7 @@ export default function Optimizer() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showDetails, setShowDetails] = useState<string | null>(null);
 
-  // Simulate AI scanning
+  // Automated AI scanning - starts immediately on page load
   useEffect(() => {
     if (isScanning) {
       const interval = setInterval(() => {
@@ -218,15 +218,36 @@ export default function Optimizer() {
           if (prev >= 100) {
             clearInterval(interval);
             setIsScanning(false);
-            setDeductions(generateDeductions());
+            // Generate deductions with OBBBA auto-applied
+            const allDeductions = generateDeductions();
+            // Auto-apply all OBBBA deductions (automated feature)
+            const autoAppliedDeductions = allDeductions.map(d =>
+              d.category === 'obbba' ? { ...d, applied: true } : d
+            );
+            setDeductions(autoAppliedDeductions);
             return 100;
           }
-          return prev + 5;
+          return prev + 8; // Faster scanning
         });
-      }, 100);
+      }, 80); // Faster interval
       return () => clearInterval(interval);
     }
   }, [isScanning]);
+
+  // Auto-apply high confidence deductions after initial scan
+  useEffect(() => {
+    if (!isScanning && deductions.length > 0) {
+      // After 2 seconds, auto-apply credits with 85%+ confidence
+      const timeout = setTimeout(() => {
+        setDeductions(prev => prev.map(d =>
+          (d.category === 'credits' && d.confidence >= 85 && !d.dismissed)
+            ? { ...d, applied: true }
+            : d
+        ));
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [isScanning, deductions.length]);
 
   // Format currency
   const formatCurrency = (amount: number) => {
@@ -244,6 +265,11 @@ export default function Optimizer() {
   // Apply deduction
   const applyDeduction = (id: string) => {
     setDeductions(deductions.map(d => d.id === id ? { ...d, applied: true } : d));
+  };
+
+  // Apply all available deductions
+  const applyAllDeductions = () => {
+    setDeductions(deductions.map(d => !d.dismissed ? { ...d, applied: true } : d));
   };
 
   // Dismiss deduction
@@ -298,16 +324,25 @@ export default function Optimizer() {
             </div>
 
             {!isScanning && (
-              <button
-                onClick={() => {
-                  setIsScanning(true);
-                  setScanProgress(0);
-                  setDeductions([]);
-                }}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
-              >
-                <RefreshCw className="w-4 h-4" /> Rescan
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={applyAllDeductions}
+                  className="flex items-center gap-2 px-4 py-2 text-white rounded-lg font-medium transition hover:opacity-90"
+                  style={{ backgroundColor: '#4CAF50' }}
+                >
+                  <Zap className="w-4 h-4" /> Apply All
+                </button>
+                <button
+                  onClick={() => {
+                    setIsScanning(true);
+                    setScanProgress(0);
+                    setDeductions([]);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
+                >
+                  <RefreshCw className="w-4 h-4" /> Rescan
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -361,6 +396,29 @@ export default function Optimizer() {
                   <span>{item.label}</span>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Auto-Applied Notification */}
+        {!isScanning && deductions.filter(d => d.category === 'obbba' && d.applied).length > 0 && (
+          <div className="mb-6 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-4 text-white flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-white/20 rounded-lg">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="font-semibold">OBBBA Deductions Auto-Applied!</h3>
+                <p className="text-sm text-green-100">
+                  We automatically applied {deductions.filter(d => d.category === 'obbba' && d.applied).length} OBBBA provisions to maximize your savings.
+                </p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-2xl font-bold">
+                {formatCurrency(deductions.filter(d => d.category === 'obbba' && d.applied).reduce((sum, d) => sum + d.estimatedSavings, 0))}
+              </p>
+              <p className="text-xs text-green-100">OBBBA Savings</p>
             </div>
           </div>
         )}

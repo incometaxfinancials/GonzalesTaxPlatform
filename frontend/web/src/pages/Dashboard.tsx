@@ -107,6 +107,7 @@ export default function Dashboard() {
   const [deleteType, setDeleteType] = useState<'return' | 'document' | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showProfileEdit, setShowProfileEdit] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   // Computed personalized recommendations
   const personalizedRecommendations = React.useMemo(() => {
@@ -185,16 +186,25 @@ export default function Dashboard() {
     setNotifications(notifications.filter(n => n.id !== id));
   };
 
-  // Simulate auto-refresh
+  // Refresh all data
   const handleRefresh = () => {
     setIsRefreshing(true);
     setTimeout(() => {
+      // Simulate fetching fresh data from API
+      setReturns([
+        { id: '1', year: 2025, status: 'in_progress', refund: 4850.00, amountOwed: 0, updated: 'Just now', progress: 65, obbbaSavings: 2150 },
+        { id: '2', year: 2024, status: 'accepted', refund: 2890.00, amountOwed: 0, updated: 'Jan 15, 2025', progress: 100, obbbaSavings: 0 },
+      ]);
+      setDocuments([
+        { id: '1', name: 'W-2 Olive Garden', type: 'W2', employer: 'Olive Garden', uploadedAt: '2 days ago', processed: true, amount: 42500 },
+        { id: '2', name: '1099-NEC Freelance', type: '1099', uploadedAt: '1 week ago', processed: true, amount: 8500 },
+      ]);
+      setNotifications([
+        { id: '1', type: 'success', title: 'OBBBA Savings Found!', message: 'Based on your tips income, you qualify for up to $25,000 in tax-free tips.', dismissible: true, timestamp: new Date(), actionText: 'View Savings', actionLink: '/optimizer' },
+        { id: '2', type: 'action', title: 'Complete Your Return', message: 'Your 2025 return is 65% complete. Finish to see your final refund.', actionText: 'Continue', actionLink: '/returns/1', dismissible: false, timestamp: new Date() },
+      ]);
       setIsRefreshing(false);
-      // Simulate updated data
-      setReturns(prev => prev.map(r =>
-        r.id === '1' ? { ...r, progress: Math.min(100, r.progress + 5) } : r
-      ));
-    }, 1500);
+    }, 1000);
   };
 
   // Get status color
@@ -267,14 +277,100 @@ export default function Dashboard() {
               >
                 <RefreshCw className="w-5 h-5" />
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg text-gray-600 relative">
-                <Bell className="w-5 h-5" />
-                {notifications.length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    {notifications.length}
-                  </span>
+              <div className="relative">
+                <button
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="p-2 hover:bg-gray-100 rounded-lg text-gray-600 relative"
+                >
+                  <Bell className="w-5 h-5" />
+                  {notifications.length > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {notifications.length}
+                    </span>
+                  )}
+                </button>
+
+                {/* Notifications Dropdown */}
+                {showNotifications && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
+                    <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50">
+                      <h3 className="font-semibold text-gray-900">Notifications</h3>
+                      <button
+                        onClick={() => setShowNotifications(false)}
+                        className="p-1 hover:bg-gray-200 rounded"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <div className="max-h-80 overflow-y-auto">
+                      {notifications.map(notif => (
+                        <div
+                          key={notif.id}
+                          onClick={() => {
+                            if (notif.actionLink) {
+                              navigate(notif.actionLink);
+                              setShowNotifications(false);
+                            }
+                          }}
+                          className={`px-4 py-3 border-b hover:bg-gray-50 cursor-pointer ${
+                            notif.type === 'success' ? 'bg-green-50' :
+                            notif.type === 'action' ? 'bg-blue-50' : ''
+                          }`}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className={`p-1.5 rounded-lg ${
+                              notif.type === 'success' ? 'bg-green-100' :
+                              notif.type === 'action' ? 'bg-blue-100' :
+                              notif.type === 'warning' ? 'bg-yellow-100' : 'bg-gray-100'
+                            }`}>
+                              {notif.type === 'success' ? <CheckCircle className="w-4 h-4 text-green-600" /> :
+                               notif.type === 'action' ? <Zap className="w-4 h-4 text-blue-600" /> :
+                               notif.type === 'warning' ? <AlertCircle className="w-4 h-4 text-yellow-600" /> :
+                               <Bell className="w-4 h-4 text-gray-600" />}
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-medium text-gray-900 text-sm">{notif.title}</p>
+                              <p className="text-xs text-gray-600 mt-0.5">{notif.message}</p>
+                              {notif.actionText && (
+                                <p className="text-xs font-medium text-blue-600 mt-1">{notif.actionText} →</p>
+                              )}
+                            </div>
+                            {notif.dismissible && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  dismissNotification(notif.id);
+                                }}
+                                className="p-1 hover:bg-gray-200 rounded text-gray-400"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                      {notifications.length === 0 && (
+                        <div className="px-4 py-8 text-center text-gray-500">
+                          <Bell className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                          <p className="text-sm">No notifications</p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="px-4 py-2 border-t bg-gray-50">
+                      <button
+                        onClick={() => {
+                          navigate('/optimizer');
+                          setShowNotifications(false);
+                        }}
+                        className="text-sm font-medium w-full text-center"
+                        style={{ color: '#1e3a5f' }}
+                      >
+                        View AI Optimizer
+                      </button>
+                    </div>
+                  </div>
                 )}
-              </button>
+              </div>
               <button
                 onClick={() => setShowProfileEdit(true)}
                 className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg"
