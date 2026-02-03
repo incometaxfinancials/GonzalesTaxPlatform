@@ -281,29 +281,29 @@ const VideoReelSection = () => {
 
   const testimonialVideos = [
     {
-      videoUrl: 'https://videos.pexels.com/video-files/3252128/3252128-sd_640_360_30fps.mp4',
-      posterUrl: 'https://images.pexels.com/photos/3760263/pexels-photo-3760263.jpeg?auto=compress&cs=tinysrgb&w=400',
+      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+      posterUrl: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=600&fit=crop',
       name: 'Jennifer Williams',
       title: 'Small Business Owner',
       quote: 'ITF saved me over $4,000 with the new OBBBA deductions. The process was so simple!'
     },
     {
-      videoUrl: 'https://videos.pexels.com/video-files/3209211/3209211-sd_640_360_25fps.mp4',
-      posterUrl: 'https://images.pexels.com/photos/3184357/pexels-photo-3184357.jpeg?auto=compress&cs=tinysrgb&w=400',
+      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      posterUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=600&fit=crop',
       name: 'Marcus Thompson',
       title: 'Restaurant Manager',
       quote: 'No tax on my tips! I got my biggest refund ever thanks to ITF.'
     },
     {
-      videoUrl: 'https://videos.pexels.com/video-files/3195440/3195440-sd_640_360_25fps.mp4',
-      posterUrl: 'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=400',
+      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+      posterUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=600&fit=crop',
       name: 'Dr. Patricia Chen',
       title: 'Healthcare Professional',
       quote: 'Professional, secure, and accurate. ITF is the only tax platform I trust.'
     },
     {
-      videoUrl: 'https://videos.pexels.com/video-files/3252131/3252131-sd_640_360_30fps.mp4',
-      posterUrl: 'https://images.pexels.com/photos/3184405/pexels-photo-3184405.jpeg?auto=compress&cs=tinysrgb&w=400',
+      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+      posterUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=600&fit=crop',
       name: 'Robert Davis',
       title: 'Retired Veteran',
       quote: 'The senior deduction was a game-changer. ITF made retirement even better.'
@@ -345,13 +345,13 @@ const VideoReelSection = () => {
               <video
                 ref={mainVideoRef}
                 className="w-full h-full object-cover"
-                poster="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                poster="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&h=675&fit=crop"
                 muted
                 loop
                 playsInline
                 onClick={toggleMainVideo}
               >
-                <source src="https://videos.pexels.com/video-files/3129671/3129671-sd_640_360_30fps.mp4" type="video/mp4" />
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
               </video>
 
               {/* Gradient Overlay */}
@@ -374,7 +374,7 @@ const VideoReelSection = () => {
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-white shadow-lg">
                     <img
-                      src="https://images.pexels.com/photos/3184405/pexels-photo-3184405.jpeg?auto=compress&cs=tinysrgb&w=100"
+                      src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop"
                       alt="CEO"
                       className="w-full h-full object-cover"
                     />
