@@ -324,17 +324,21 @@ export default function QuickCalc() {
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* Left Sidebar */}
-      <div className="w-56 bg-white border-r border-gray-200 flex flex-col">
-        <div className="p-4 border-b border-gray-200">
-          <Link to="/dashboard"><img src="/logo.svg" alt="ITF Logo" className="w-28 h-auto" /></Link>
+      <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
+        {/* Logo Section */}
+        <div className="p-6 border-b border-gray-200 bg-gradient-to-br from-[#1e3a5f] to-[#2c4a7c]">
+          <Link to="/dashboard" className="block">
+            <img src="/logo.svg" alt="ITF Logo" className="w-full h-auto" />
+          </Link>
+          <p className="text-blue-200 text-xs mt-2 text-center">Quick Tax Calculator</p>
         </div>
         <nav className="flex-1 p-4 space-y-1">
           <a href="https://www.irs.gov" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded transition">
             <ExternalLink className="w-4 h-4" />IRS Website
           </a>
-          <Link to="/tax-return" className="flex items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded transition">
+          <Link to="/returns/new" className="flex items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded transition">
             <FileText className="w-4 h-4" />Full Tax Return
-          </a>
+          </Link>
           <a href="https://www.irs.gov/forms-instructions" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded transition">
             <FileText className="w-4 h-4" />IRS Publications & Forms
           </a>

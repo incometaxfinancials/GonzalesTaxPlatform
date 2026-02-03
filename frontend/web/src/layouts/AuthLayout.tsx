@@ -6,52 +6,6 @@ import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { Shield, Lock, CheckCircle } from 'lucide-react';
 
-// ITF Logo Component
-const ITFLogo = () => (
-  <svg viewBox="0 0 200 120" className="w-32 h-20">
-    <defs>
-      <linearGradient id="blueGradAuth" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" style={{ stopColor: '#2c4a7c' }} />
-        <stop offset="100%" style={{ stopColor: '#1e3a5f' }} />
-      </linearGradient>
-      <linearGradient id="greenGradAuth" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style={{ stopColor: '#6BBF59' }} />
-        <stop offset="100%" style={{ stopColor: '#4CAF50' }} />
-      </linearGradient>
-      <filter id="shadowAuth" x="-10%" y="-10%" width="120%" height="120%">
-        <feDropShadow dx="1" dy="2" stdDeviation="2" floodColor="#1e3a5f" floodOpacity="0.3" />
-      </filter>
-    </defs>
-
-    {/* Letter I */}
-    <rect x="30" y="20" width="25" height="70" rx="3" fill="url(#blueGradAuth)" filter="url(#shadowAuth)" />
-
-    {/* Letter T */}
-    <rect x="70" y="32" width="25" height="58" rx="3" fill="url(#blueGradAuth)" filter="url(#shadowAuth)" />
-    <rect x="55" y="20" width="55" height="18" rx="3" fill="url(#blueGradAuth)" filter="url(#shadowAuth)" />
-
-    {/* Checkmark on T */}
-    <path
-      d="M62 42 L78 62 L118 14"
-      stroke="url(#greenGradAuth)"
-      strokeWidth="12"
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      filter="url(#shadowAuth)"
-    />
-
-    {/* Letter F */}
-    <rect x="125" y="20" width="25" height="70" rx="3" fill="url(#blueGradAuth)" filter="url(#shadowAuth)" />
-    <rect x="125" y="20" width="40" height="17" rx="3" fill="url(#blueGradAuth)" filter="url(#shadowAuth)" />
-    <rect x="125" y="48" width="32" height="12" rx="3" fill="url(#blueGradAuth)" filter="url(#shadowAuth)" />
-
-    {/* Swooshes */}
-    <ellipse cx="100" cy="102" rx="85" ry="14" fill="none" stroke="url(#greenGradAuth)" strokeWidth="5" />
-    <ellipse cx="100" cy="108" rx="70" ry="10" fill="none" stroke="url(#blueGradAuth)" strokeWidth="3" />
-  </svg>
-);
-
 export default function AuthLayout() {
   return (
     <div className="min-h-screen flex">
@@ -62,7 +16,7 @@ export default function AuthLayout() {
       >
         <div>
           <Link to="/home">
-            <ITFLogo />
+            <img src="/logo.svg" alt="ITF Logo" className="w-48 h-auto" />
           </Link>
           <h1 className="text-4xl font-bold text-white mt-8">
             Income<span style={{ color: '#4CAF50' }}>.</span> Tax<span style={{ color: '#4CAF50' }}>.</span> Financials
@@ -131,13 +85,10 @@ export default function AuthLayout() {
       <div className="flex-1 flex flex-col items-center justify-center p-8 bg-gray-50">
         {/* Auth Form Container */}
         <div className="w-full max-w-md">
-          {/* ITF Logo at Top */}
-          <div className="flex flex-col items-center mb-6">
-            <Link to="/home" className="flex flex-col items-center">
-              <ITFLogo />
-              <h1 className="text-xl font-bold mt-2" style={{ color: '#1e3a5f' }}>
-                Income<span style={{ color: '#4CAF50' }}>.</span> Tax<span style={{ color: '#4CAF50' }}>.</span> Financials
-              </h1>
+          {/* ITF Logo at Top Left */}
+          <div className="flex items-start mb-6">
+            <Link to="/home" className="flex items-center gap-3">
+              <img src="/logo.svg" alt="ITF Logo" className="w-32 h-auto" />
             </Link>
           </div>
 
