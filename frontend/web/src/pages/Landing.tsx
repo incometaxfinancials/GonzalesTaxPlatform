@@ -93,107 +93,207 @@ const OBBBABenefit = ({ amount, title, description }: { amount: string; title: s
   </div>
 );
 
-// Video Testimonial Component
-const VideoTestimonial = ({
-  videoUrl,
-  posterUrl,
-  name,
+// ITF Commercial Video Component - Animated with Voice Script
+const ITFCommercialVideo = ({
   title,
-  quote
+  subtitle,
+  script,
+  icon: Icon,
+  gradient,
+  features,
+  testimonial
 }: {
-  videoUrl: string;
-  posterUrl: string;
-  name: string;
   title: string;
-  quote: string;
+  subtitle: string;
+  script: string[];
+  icon: React.ElementType;
+  gradient: string;
+  features: string[];
+  testimonial?: { name: string; role: string; quote: string };
 }) => {
+  const [currentLine, setCurrentLine] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(false);
+
+  // Auto-advance script lines
+  useEffect(() => {
+    if (!isPlaying) return;
+    const interval = setInterval(() => {
+      setCurrentLine((prev) => (prev + 1) % script.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isPlaying, script.length]);
+
+  // Text-to-speech for voice
+  const speak = (text: string) => {
+    if ('speechSynthesis' in window && !isMuted) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  useEffect(() => {
+    if (isPlaying && !isMuted) {
+      speak(script[currentLine]);
+    }
+  }, [currentLine, isPlaying, isMuted]);
 
   const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
+    if (!isPlaying) {
+      setIsPlaying(true);
+      if (!isMuted) speak(script[0]);
+    } else {
+      setIsPlaying(false);
+      window.speechSynthesis?.cancel();
     }
   };
 
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
+    if (!isMuted) {
+      window.speechSynthesis?.cancel();
     }
-  };
-
-  // Auto-play on hover
-  const handleMouseEnter = () => {
-    if (videoRef.current && !isPlaying) {
-      videoRef.current.play();
-      setIsPlaying(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (videoRef.current && isPlaying) {
-      videoRef.current.pause();
-      setIsPlaying(false);
-    }
+    setIsMuted(!isMuted);
   };
 
   return (
     <div
-      className="relative group rounded-2xl overflow-hidden shadow-xl bg-gray-900 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className="relative rounded-2xl overflow-hidden shadow-2xl cursor-pointer transform transition-all duration-500 hover:scale-[1.02]"
+      style={{ background: gradient }}
+      onClick={togglePlay}
     >
-      <div className="aspect-[9/16] relative">
-        <video
-          ref={videoRef}
-          className="w-full h-full object-cover"
-          poster={posterUrl}
-          muted={isMuted}
-          loop
-          playsInline
-          onClick={togglePlay}
-        >
-          <source src={videoUrl} type="video/mp4" />
-        </video>
+      <div className="aspect-video relative p-8 flex flex-col justify-between">
+        {/* Animated Background Pattern */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full animate-pulse" />
+          <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-white/10 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+          {isPlaying && (
+            <>
+              <div className="absolute top-1/4 left-1/4 w-4 h-4 bg-white/30 rounded-full animate-ping" />
+              <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-white/20 rounded-full animate-ping" style={{ animationDelay: '0.5s' }} />
+            </>
+          )}
+        </div>
 
-        {/* Overlay Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+        {/* Top Bar - Logo & Controls */}
+        <div className="relative flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {/* ITF Logo */}
+            <div className="bg-white rounded-xl p-2 shadow-lg">
+              <svg viewBox="0 0 60 40" className="w-12 h-8">
+                <defs>
+                  <linearGradient id={`logoBlue-${title}`} x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#2c4a7c" />
+                    <stop offset="100%" stopColor="#1e3a5f" />
+                  </linearGradient>
+                  <linearGradient id={`logoGreen-${title}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#6BBF59" />
+                    <stop offset="100%" stopColor="#4CAF50" />
+                  </linearGradient>
+                </defs>
+                <rect x="5" y="8" width="8" height="24" rx="1" fill={`url(#logoBlue-${title})`} />
+                <rect x="18" y="12" width="8" height="20" rx="1" fill={`url(#logoBlue-${title})`} />
+                <rect x="14" y="8" width="16" height="6" rx="1" fill={`url(#logoBlue-${title})`} />
+                <path d="M16 16 L22 24 L38 4" stroke={`url(#logoGreen-${title})`} strokeWidth="4" fill="none" strokeLinecap="round" />
+                <rect x="42" y="8" width="8" height="24" rx="1" fill={`url(#logoBlue-${title})`} />
+                <rect x="42" y="8" width="14" height="5" rx="1" fill={`url(#logoBlue-${title})`} />
+                <rect x="42" y="18" width="11" height="4" rx="1" fill={`url(#logoBlue-${title})`} />
+              </svg>
+            </div>
+            <div className="text-white">
+              <p className="font-bold text-sm">Income. Tax. Financials</p>
+              <p className="text-xs text-white/70">Professional Tax Solutions</p>
+            </div>
+          </div>
 
-        {/* Play/Pause Button */}
-        <button
-          onClick={togglePlay}
-          className="absolute inset-0 flex items-center justify-center"
-        >
+          <div className="flex items-center gap-2">
+            {/* Sound Button */}
+            <button
+              onClick={toggleMute}
+              className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition-all"
+            >
+              {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+            </button>
+            {/* Live Indicator */}
+            {isPlaying && (
+              <div className="flex items-center gap-2 bg-red-500 px-3 py-1 rounded-full">
+                <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                <span className="text-white text-xs font-bold">LIVE</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Center Content */}
+        <div className="relative flex-1 flex flex-col items-center justify-center text-center">
+          <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-4 backdrop-blur">
+            <Icon className="w-10 h-10 text-white" />
+          </div>
+          <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">{title}</h3>
+          <p className="text-white/80 text-sm md:text-base mb-4">{subtitle}</p>
+
+          {/* Animated Script Line (Voice Caption) */}
+          <div className="min-h-[60px] flex items-center justify-center">
+            <p
+              className={`text-lg md:text-xl font-medium text-white px-6 py-3 bg-black/30 rounded-xl backdrop-blur transition-all duration-500 ${isPlaying ? 'opacity-100 scale-100' : 'opacity-70 scale-95'}`}
+              key={currentLine}
+              style={{ animation: isPlaying ? 'fadeInUp 0.5s ease-out' : 'none' }}
+            >
+              "{script[currentLine]}"
+            </p>
+          </div>
+
+          {/* Play Button */}
           {!isPlaying && (
-            <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
-              <Play className="w-8 h-8 text-[#1e3a5f] ml-1" fill="#1e3a5f" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform">
+                <Play className="w-10 h-10 text-[#1e3a5f] ml-1" fill="#1e3a5f" />
+              </div>
             </div>
           )}
-        </button>
-
-        {/* Sound Button - Always Visible */}
-        <button
-          onClick={toggleMute}
-          className="absolute top-4 right-4 w-10 h-10 bg-black/60 rounded-full flex items-center justify-center text-white hover:bg-green-600 transition-all shadow-lg"
-        >
-          {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-        </button>
-
-        {/* Person Info */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-          <p className="font-bold text-lg">{name}</p>
-          <p className="text-sm text-gray-300">{title}</p>
-          <p className="text-sm mt-2 line-clamp-2 text-gray-200">"{quote}"</p>
         </div>
+
+        {/* Bottom - Features */}
+        <div className="relative">
+          <div className="flex flex-wrap justify-center gap-2">
+            {features.map((feature, i) => (
+              <span key={i} className="px-3 py-1 bg-white/20 rounded-full text-white text-xs font-medium backdrop-blur">
+                {feature}
+              </span>
+            ))}
+          </div>
+
+          {/* Testimonial Quote */}
+          {testimonial && isPlaying && (
+            <div className="mt-4 text-center">
+              <p className="text-white/90 text-sm italic">"{testimonial.quote}"</p>
+              <p className="text-white/70 text-xs mt-1">— {testimonial.name}, {testimonial.role}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Progress Bar */}
+        {isPlaying && (
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+            <div
+              className="h-full bg-white transition-all duration-[3000ms] ease-linear"
+              style={{ width: `${((currentLine + 1) / script.length) * 100}%` }}
+            />
+          </div>
+        )}
       </div>
+
+      {/* CSS for animations */}
+      <style>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 };
@@ -240,213 +340,181 @@ const AnimatedCounter = ({ target, suffix = '' }: { target: number; suffix?: str
   );
 };
 
-// Main Video Reel Component
+// Main Video Reel Component - 5 Professional ITF Commercials
 const VideoReelSection = () => {
-  const [activeVideo, setActiveVideo] = useState(0);
-  const [isMainPlaying, setIsMainPlaying] = useState(false);
-  const [isMainMuted, setIsMainMuted] = useState(true);
-  const mainVideoRef = React.useRef<HTMLVideoElement>(null);
-  const sectionRef = React.useRef<HTMLDivElement>(null);
+  const [activeCommercial, setActiveCommercial] = useState(0);
 
-  const toggleMainMute = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (mainVideoRef.current) {
-      mainVideoRef.current.muted = !isMainMuted;
-      setIsMainMuted(!isMainMuted);
-    }
-  };
-
-  // Auto-play main video when scrolled into view
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && mainVideoRef.current) {
-          mainVideoRef.current.play();
-          setIsMainPlaying(true);
-        } else if (mainVideoRef.current) {
-          mainVideoRef.current.pause();
-          setIsMainPlaying(false);
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  // Auto-cycle through testimonial highlights
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveVideo((prev) => (prev + 1) % 4);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const testimonialVideos = [
+  // 5 Professional ITF Tax Preparation Commercials
+  const commercials = [
     {
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-      posterUrl: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=600&fit=crop',
-      name: 'Jennifer Williams',
-      title: 'Small Business Owner',
-      quote: 'ITF saved me over $4,000 with the new OBBBA deductions. The process was so simple!'
+      title: 'Welcome to ITF',
+      subtitle: 'Your Trusted Tax Partner',
+      gradient: 'linear-gradient(135deg, #1e3a5f 0%, #2c5282 50%, #1e3a5f 100%)',
+      icon: Shield,
+      script: [
+        "Welcome to Income Tax Financials.",
+        "We're not just another tax service.",
+        "We're your partner in financial success.",
+        "With ITF, you get professional tax preparation.",
+        "Secure, accurate, and IRS authorized.",
+        "Let us help you maximize your refund today."
+      ],
+      features: ['IRS Authorized', 'SOC-2 Certified', 'AES-256 Encrypted'],
+      testimonial: { name: 'Sarah M.', role: 'Business Owner', quote: 'ITF made tax season stress-free!' }
     },
     {
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-      posterUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=600&fit=crop',
-      name: 'Marcus Thompson',
-      title: 'Restaurant Manager',
-      quote: 'No tax on my tips! I got my biggest refund ever thanks to ITF.'
+      title: 'OBBBA 2025 Benefits',
+      subtitle: 'No Tax on Tips & Overtime',
+      gradient: 'linear-gradient(135deg, #4CAF50 0%, #2E7D32 50%, #1B5E20 100%)',
+      icon: DollarSign,
+      script: [
+        "Introducing OBBBA 2025 tax benefits.",
+        "No tax on tips up to twenty-five thousand dollars.",
+        "No tax on overtime up to ten thousand dollars.",
+        "Six thousand dollar senior citizen deduction.",
+        "Twenty-two hundred dollar child tax credit.",
+        "ITF helps you claim every dollar you deserve."
+      ],
+      features: ['No Tax on Tips', 'No Tax on Overtime', 'Senior Benefits'],
+      testimonial: { name: 'Marcus T.', role: 'Restaurant Server', quote: 'Got $3,000 more this year!' }
     },
     {
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-      posterUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=600&fit=crop',
-      name: 'Dr. Patricia Chen',
-      title: 'Healthcare Professional',
-      quote: 'Professional, secure, and accurate. ITF is the only tax platform I trust.'
+      title: 'AI-Powered Optimization',
+      subtitle: 'Find Hidden Deductions',
+      gradient: 'linear-gradient(135deg, #7C3AED 0%, #5B21B6 50%, #4C1D95 100%)',
+      icon: Sparkles,
+      script: [
+        "Our AI scans every line of your return.",
+        "Finding deductions you might have missed.",
+        "Average savings of four thousand dollars.",
+        "Real-time optimization suggestions.",
+        "Powered by advanced tax intelligence.",
+        "Your maximum refund, guaranteed."
+      ],
+      features: ['AI Deduction Finder', 'Real-Time Analysis', 'Max Refund Guarantee'],
+      testimonial: { name: 'Jennifer W.', role: 'Freelancer', quote: 'Found $4,200 in deductions I missed!' }
     },
     {
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-      posterUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=600&fit=crop',
-      name: 'Robert Davis',
-      title: 'Retired Veteran',
-      quote: 'The senior deduction was a game-changer. ITF made retirement even better.'
+      title: 'Fast & Easy Filing',
+      subtitle: 'File in Under 30 Minutes',
+      gradient: 'linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%)',
+      icon: Zap,
+      script: [
+        "Upload your W-2, we do the rest.",
+        "Smart form auto-fill saves you time.",
+        "Step by step guidance throughout.",
+        "E-file directly to the IRS.",
+        "Get your refund in as fast as 8 days.",
+        "Tax filing has never been this easy."
+      ],
+      features: ['Auto W-2 Import', 'E-File Ready', 'Fast Refunds'],
+      testimonial: { name: 'David R.', role: 'Engineer', quote: 'Filed in 20 minutes, refund in 10 days!' }
+    },
+    {
+      title: 'Security First',
+      subtitle: 'Your Data is Protected',
+      gradient: 'linear-gradient(135deg, #DC2626 0%, #B91C1C 50%, #991B1B 100%)',
+      icon: Shield,
+      script: [
+        "Bank-level security protects your data.",
+        "AES 256-bit encryption on all information.",
+        "SOC-2 Type II certified platform.",
+        "Multi-factor authentication available.",
+        "Your privacy is our top priority.",
+        "File with confidence at ITF."
+      ],
+      features: ['Bank-Level Security', 'FIDO2 Biometrics', 'Privacy Protected'],
+      testimonial: { name: 'Patricia C.', role: 'Healthcare Pro', quote: 'I trust ITF with my sensitive data.' }
     }
   ];
 
-  const toggleMainVideo = () => {
-    if (mainVideoRef.current) {
-      if (isMainPlaying) {
-        mainVideoRef.current.pause();
-      } else {
-        mainVideoRef.current.play();
-      }
-      setIsMainPlaying(!isMainPlaying);
-    }
-  };
+  // Auto-cycle through commercials
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveCommercial((prev) => (prev + 1) % commercials.length);
+    }, 15000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <section ref={sectionRef} className="py-20 bg-white overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Play className="w-4 h-4" fill="currentColor" />
-            Watch Real Stories
+            ITF Commercial Series
           </div>
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Meet the People We've Helped
+            Discover What ITF Can Do For You
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Real professionals sharing their experience with Income. Tax. Financials
+            Click any video to play with voice narration. Learn how Income. Tax. Financials maximizes your refund.
           </p>
         </div>
 
-        {/* Main Video Feature */}
-        <div className="mb-12">
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-gray-900 max-w-4xl mx-auto">
-            <div className="aspect-video relative">
-              <video
-                ref={mainVideoRef}
-                className="w-full h-full object-cover"
-                poster="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&h=675&fit=crop"
-                muted
-                loop
-                playsInline
-                onClick={toggleMainVideo}
-              >
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-              </video>
-
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
-
-              {/* Play Button */}
-              <button
-                onClick={toggleMainVideo}
-                className="absolute inset-0 flex items-center justify-center"
-              >
-                {!isMainPlaying && (
-                  <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform">
-                    <Play className="w-12 h-12 text-[#1e3a5f] ml-2" fill="#1e3a5f" />
-                  </div>
-                )}
-              </button>
-
-              {/* Video Info Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-white shadow-lg">
-                    <img
-                      src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop"
-                      alt="CEO"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="text-white">
-                    <p className="font-bold text-xl">Welcome to ITF</p>
-                    <p className="text-gray-300">See how we're changing tax preparation</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* ITF Badge */}
-              <div className="absolute top-6 left-6 bg-white/90 backdrop-blur px-4 py-2 rounded-full">
-                <p className="font-bold text-sm" style={{ color: '#1e3a5f' }}>
-                  Income<span style={{ color: '#4CAF50' }}>.</span> Tax<span style={{ color: '#4CAF50' }}>.</span> Financials
-                </p>
-              </div>
-
-              {/* Top Right Controls */}
-              <div className="absolute top-6 right-6 flex items-center gap-3">
-                {/* Sound Button */}
-                <button
-                  onClick={toggleMainMute}
-                  className="w-12 h-12 bg-black/60 hover:bg-green-600 rounded-full flex items-center justify-center text-white transition-all shadow-lg"
-                >
-                  {isMainMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
-                </button>
-                {/* Live Badge */}
-                <div className="flex items-center gap-2 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-medium">
-                  <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                  2025 OBBBA
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Featured Commercial (Large) */}
+        <div className="mb-8">
+          <ITFCommercialVideo
+            title={commercials[activeCommercial].title}
+            subtitle={commercials[activeCommercial].subtitle}
+            script={commercials[activeCommercial].script}
+            icon={commercials[activeCommercial].icon}
+            gradient={commercials[activeCommercial].gradient}
+            features={commercials[activeCommercial].features}
+            testimonial={commercials[activeCommercial].testimonial}
+          />
         </div>
 
-        {/* Video Testimonials Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {testimonialVideos.map((video, index) => (
+        {/* Commercial Selector */}
+        <div className="flex justify-center gap-2 mb-8">
+          {commercials.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setActiveCommercial(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                activeCommercial === index ? 'bg-[#1e3a5f] w-8' : 'bg-gray-300 hover:bg-gray-400'
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* All 5 Commercials Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {commercials.slice(0, 3).map((commercial, index) => (
             <div
               key={index}
-              className={`transition-all duration-500 ${activeVideo === index ? 'ring-4 ring-green-500 ring-offset-2 rounded-2xl' : ''}`}
+              onClick={() => setActiveCommercial(index)}
+              className={`cursor-pointer transition-all duration-300 ${activeCommercial === index ? 'ring-4 ring-green-500 ring-offset-2 rounded-2xl scale-[1.02]' : 'opacity-80 hover:opacity-100'}`}
             >
-              <VideoTestimonial
-                videoUrl={video.videoUrl}
-                posterUrl={video.posterUrl}
-                name={video.name}
-                title={video.title}
-                quote={video.quote}
+              <ITFCommercialVideo
+                title={commercial.title}
+                subtitle={commercial.subtitle}
+                script={commercial.script}
+                icon={commercial.icon}
+                gradient={commercial.gradient}
+                features={commercial.features}
               />
             </div>
           ))}
         </div>
 
-        {/* Auto-cycle indicators */}
-        <div className="flex justify-center gap-2 mt-6">
-          {testimonialVideos.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveVideo(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                activeVideo === index ? 'bg-green-500 w-8' : 'bg-gray-300 hover:bg-gray-400'
-              }`}
-            />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 max-w-4xl mx-auto">
+          {commercials.slice(3, 5).map((commercial, index) => (
+            <div
+              key={index + 3}
+              onClick={() => setActiveCommercial(index + 3)}
+              className={`cursor-pointer transition-all duration-300 ${activeCommercial === index + 3 ? 'ring-4 ring-green-500 ring-offset-2 rounded-2xl scale-[1.02]' : 'opacity-80 hover:opacity-100'}`}
+            >
+              <ITFCommercialVideo
+                title={commercial.title}
+                subtitle={commercial.subtitle}
+                script={commercial.script}
+                icon={commercial.icon}
+                gradient={commercial.gradient}
+                features={commercial.features}
+              />
+            </div>
           ))}
         </div>
 
