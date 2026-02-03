@@ -8,7 +8,7 @@ import {
   FileText, Calculator, Upload, Sparkles, ArrowRight, Plus, Clock, CheckCircle,
   ArrowLeft, Trash2, Edit, AlertCircle, User, DollarSign, TrendingUp,
   Bell, Settings, LogOut, ChevronRight, X, Check, RefreshCw, Zap,
-  Calendar, CreditCard, Building, Briefcase, Home, Heart, GraduationCap
+  Calendar, CreditCard, Building, Briefcase, Home, Heart, GraduationCap, Users
 } from 'lucide-react';
 
 // User Profile Interface
