@@ -78,6 +78,17 @@ from .form_schemas import (
     FormSchemaManager
 )
 
+from .mef_providers import (
+    MeFFormCategory,
+    MeFFormType,
+    MEF_FORM_TYPES,
+    MeFProviderCredentials,
+    SSAConfiguration,
+    SSAFormats,
+    MeFProviderManager,
+    InformationReturnManager
+)
+
 __all__ = [
     # MeF Standards
     'MeFVersion',
@@ -139,5 +150,15 @@ __all__ = [
     'BinaryAttachmentSpec',
     'BINARY_ATTACHMENT_TYPES',
     'PDF_NAMING_CONVENTIONS',
-    'FormSchemaManager'
+    'FormSchemaManager',
+
+    # MeF Providers
+    'MeFFormCategory',
+    'MeFFormType',
+    'MEF_FORM_TYPES',
+    'MeFProviderCredentials',
+    'SSAConfiguration',
+    'SSAFormats',
+    'MeFProviderManager',
+    'InformationReturnManager'
 ]
