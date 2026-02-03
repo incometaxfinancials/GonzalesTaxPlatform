@@ -637,6 +637,154 @@ export default function Dashboard() {
                 )}
               </div>
             </div>
+
+            {/* Bottom Left Section - Two Column Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              {/* Important Tax Deadlines */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+                <div className="p-4 border-b border-gray-100">
+                  <h2 className="font-bold text-gray-900 flex items-center gap-2">
+                    <Calendar className="w-5 h-5 text-red-500" />
+                    Important Deadlines
+                  </h2>
+                </div>
+                <div className="p-4 space-y-3">
+                  <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                        <span className="text-red-600 font-bold text-sm">15</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900">April 15, 2026</p>
+                        <p className="text-xs text-gray-500">Federal Tax Filing Deadline</p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-medium text-red-600 bg-red-100 px-2 py-1 rounded">73 days</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                        <span className="text-yellow-600 font-bold text-sm">15</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900">January 15, 2026</p>
+                        <p className="text-xs text-gray-500">Q4 Estimated Tax Payment</p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded">Passed</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <span className="text-blue-600 font-bold text-sm">31</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900">January 31, 2026</p>
+                        <p className="text-xs text-gray-500">W-2 & 1099 Forms Due</p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded">Passed</span>
+                  </div>
+                  <Link
+                    to="/calendar"
+                    className="block text-center text-sm font-medium py-2 text-blue-600 hover:text-blue-700"
+                  >
+                    View Full Tax Calendar →
+                  </Link>
+                </div>
+              </div>
+
+              {/* OBBBA 2025 Benefits */}
+              <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-sm text-white">
+                <div className="p-4 border-b border-white/20">
+                  <h2 className="font-bold flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-yellow-300" />
+                    OBBBA 2025 Benefits
+                  </h2>
+                  <p className="text-green-100 text-xs mt-1">New tax savings available this year</p>
+                </div>
+                <div className="p-4 space-y-3">
+                  <div className="flex items-center gap-3 p-3 bg-white/10 rounded-lg">
+                    <DollarSign className="w-8 h-8 text-yellow-300" />
+                    <div>
+                      <p className="font-semibold">No Tax on Tips</p>
+                      <p className="text-xs text-green-100">Up to $25,000 tax-free</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-white/10 rounded-lg">
+                    <Clock className="w-8 h-8 text-yellow-300" />
+                    <div>
+                      <p className="font-semibold">No Tax on Overtime</p>
+                      <p className="text-xs text-green-100">Up to $10,000 deductible</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-white/10 rounded-lg">
+                    <Heart className="w-8 h-8 text-yellow-300" />
+                    <div>
+                      <p className="font-semibold">Senior Bonus</p>
+                      <p className="text-xs text-green-100">$6,000 extra deduction (65+)</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-white/10 rounded-lg">
+                    <Users className="w-8 h-8 text-yellow-300" />
+                    <div>
+                      <p className="font-semibold">Child Tax Credit</p>
+                      <p className="text-xs text-green-100">$2,200 per qualifying child</p>
+                    </div>
+                  </div>
+                  <Link
+                    to="/optimizer"
+                    className="block text-center text-sm font-semibold py-2 bg-white/20 rounded-lg hover:bg-white/30 transition mt-2"
+                  >
+                    Check My Eligibility →
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Tools Row */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mt-6">
+              <h2 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Briefcase className="w-5 h-5" style={{ color: '#1e3a5f' }} />
+                Quick Tools
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <Link
+                  to="/quick-calc"
+                  className="flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:bg-blue-50 hover:border-blue-200 border border-transparent transition text-center"
+                >
+                  <Calculator className="w-8 h-8 mb-2" style={{ color: '#1e3a5f' }} />
+                  <span className="text-sm font-medium text-gray-700">Quick Calc</span>
+                  <span className="text-xs text-gray-500">Estimate refund</span>
+                </Link>
+                <Link
+                  to="/documents"
+                  className="flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:bg-green-50 hover:border-green-200 border border-transparent transition text-center"
+                >
+                  <Upload className="w-8 h-8 mb-2 text-green-600" />
+                  <span className="text-sm font-medium text-gray-700">Upload W-2</span>
+                  <span className="text-xs text-gray-500">Scan & import</span>
+                </Link>
+                <Link
+                  to="/optimizer"
+                  className="flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:bg-yellow-50 hover:border-yellow-200 border border-transparent transition text-center"
+                >
+                  <Sparkles className="w-8 h-8 mb-2 text-yellow-500" />
+                  <span className="text-sm font-medium text-gray-700">AI Optimizer</span>
+                  <span className="text-xs text-gray-500">Find deductions</span>
+                </Link>
+                <a
+                  href="https://www.irs.gov/refunds"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:bg-purple-50 hover:border-purple-200 border border-transparent transition text-center"
+                >
+                  <CreditCard className="w-8 h-8 mb-2 text-purple-600" />
+                  <span className="text-sm font-medium text-gray-700">Track Refund</span>
+                  <span className="text-xs text-gray-500">IRS Where's My Refund</span>
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Sidebar */}
