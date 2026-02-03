@@ -5,6 +5,7 @@
  */
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Calculator,
   ChevronRight,
@@ -18,6 +19,7 @@ import {
   CheckCircle,
   Users,
   Home,
+  ArrowLeft,
 } from 'lucide-react';
 
 // ============================================================================
@@ -251,6 +253,7 @@ function calculateTax(
 // ============================================================================
 
 export default function QuickCalc() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabId>('simple');
   const tabs: { id: TabId; label: string }[] = [
     { id: 'simple', label: 'Simple Return' },
@@ -327,6 +330,12 @@ export default function QuickCalc() {
       <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
         {/* Logo Section */}
         <div className="p-6 border-b border-gray-200 bg-gradient-to-br from-[#1e3a5f] to-[#2c4a7c]">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 text-white/80 hover:text-white mb-4 text-sm transition"
+          >
+            <ArrowLeft className="w-4 h-4" /> Back
+          </button>
           <Link to="/dashboard" className="block">
             <img src="/logo.svg" alt="ITF Logo" className="w-full h-auto" />
           </Link>

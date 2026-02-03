@@ -13,6 +13,7 @@ import {
   Eye,
   EyeOff,
   ArrowRight,
+  ArrowLeft,
   Check,
   X,
   AlertCircle,
@@ -168,6 +169,14 @@ export default function Register() {
 
   return (
     <div>
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+      >
+        <ArrowLeft className="w-4 h-4" /> Back
+      </button>
+
       <h2 className="text-2xl font-bold text-gray-900 mb-2">Create Your Account</h2>
       <p className="text-gray-600 mb-6">Join thousands filing taxes with confidence</p>
 

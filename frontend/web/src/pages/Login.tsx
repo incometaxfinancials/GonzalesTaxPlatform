@@ -531,6 +531,14 @@ export default function Login() {
   // Main Login Screen
   return (
     <div>
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+      >
+        <ArrowLeft className="w-4 h-4" /> Back
+      </button>
+
       {/* Security Status Bar */}
       <div className="flex items-center justify-between mb-6 p-3 bg-green-50 rounded-lg border border-green-200">
         <div className="flex items-center gap-2 text-green-700 text-sm">

@@ -1,4 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 // Tax bracket data for 2025 with OBBBA updates
 const TAX_BRACKETS_2025 = {
@@ -180,6 +182,7 @@ function getMarginalRate(brackets: typeof TAX_BRACKETS_2025.single, income: numb
 }
 
 export default function TaxCalculator() {
+  const navigate = useNavigate();
   const [input, setInput] = useState<TaxInput>(initialInput);
   const [activeStep, setActiveStep] = useState(0);
 
@@ -362,8 +365,18 @@ export default function TaxCalculator() {
       {/* Header */}
       <header className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-6">
         <div className="max-w-6xl mx-auto px-4">
-          <h1 className="text-2xl font-bold">Tax Calculator 2025</h1>
-          <p className="text-blue-100">With OBBBA Tax Savings Provisions</p>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate(-1)}
+              className="p-2 hover:bg-white/20 rounded-lg transition"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div>
+              <h1 className="text-2xl font-bold">Tax Calculator 2025</h1>
+              <p className="text-blue-100">With OBBBA Tax Savings Provisions</p>
+            </div>
+          </div>
         </div>
       </header>
 
