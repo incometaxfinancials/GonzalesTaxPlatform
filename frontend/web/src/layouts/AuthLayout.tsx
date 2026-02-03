@@ -129,18 +129,18 @@ export default function AuthLayout() {
 
       {/* Right Panel - Auth Form */}
       <div className="flex-1 flex flex-col items-center justify-center p-8 bg-gray-50">
-        {/* Mobile Logo */}
-        <div className="lg:hidden mb-8">
-          <Link to="/home" className="flex flex-col items-center">
-            <ITFLogo />
-            <h1 className="text-xl font-bold mt-4" style={{ color: '#1e3a5f' }}>
-              Income<span style={{ color: '#4CAF50' }}>.</span> Tax<span style={{ color: '#4CAF50' }}>.</span> Financials
-            </h1>
-          </Link>
-        </div>
-
         {/* Auth Form Container */}
         <div className="w-full max-w-md">
+          {/* ITF Logo at Top */}
+          <div className="flex flex-col items-center mb-6">
+            <Link to="/home" className="flex flex-col items-center">
+              <ITFLogo />
+              <h1 className="text-xl font-bold mt-2" style={{ color: '#1e3a5f' }}>
+                Income<span style={{ color: '#4CAF50' }}>.</span> Tax<span style={{ color: '#4CAF50' }}>.</span> Financials
+              </h1>
+            </Link>
+          </div>
+
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             <Outlet />
           </div>
