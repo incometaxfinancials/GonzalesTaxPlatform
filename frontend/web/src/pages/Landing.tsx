@@ -179,15 +179,13 @@ const VideoTestimonial = ({
           )}
         </button>
 
-        {/* Mute Button */}
-        {isPlaying && (
-          <button
-            onClick={toggleMute}
-            className="absolute top-4 right-4 w-10 h-10 bg-black/50 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition"
-          >
-            {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-          </button>
-        )}
+        {/* Sound Button - Always Visible */}
+        <button
+          onClick={toggleMute}
+          className="absolute top-4 right-4 w-10 h-10 bg-black/60 rounded-full flex items-center justify-center text-white hover:bg-green-600 transition-all shadow-lg"
+        >
+          {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+        </button>
 
         {/* Person Info */}
         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
@@ -246,8 +244,17 @@ const AnimatedCounter = ({ target, suffix = '' }: { target: number; suffix?: str
 const VideoReelSection = () => {
   const [activeVideo, setActiveVideo] = useState(0);
   const [isMainPlaying, setIsMainPlaying] = useState(false);
+  const [isMainMuted, setIsMainMuted] = useState(true);
   const mainVideoRef = React.useRef<HTMLVideoElement>(null);
   const sectionRef = React.useRef<HTMLDivElement>(null);
+
+  const toggleMainMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (mainVideoRef.current) {
+      mainVideoRef.current.muted = !isMainMuted;
+      setIsMainMuted(!isMainMuted);
+    }
+  };
 
   // Auto-play main video when scrolled into view
   useEffect(() => {
@@ -393,10 +400,20 @@ const VideoReelSection = () => {
                 </p>
               </div>
 
-              {/* Live Badge */}
-              <div className="absolute top-6 right-6 flex items-center gap-2 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-medium">
-                <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                2025 OBBBA
+              {/* Top Right Controls */}
+              <div className="absolute top-6 right-6 flex items-center gap-3">
+                {/* Sound Button */}
+                <button
+                  onClick={toggleMainMute}
+                  className="w-12 h-12 bg-black/60 hover:bg-green-600 rounded-full flex items-center justify-center text-white transition-all shadow-lg"
+                >
+                  {isMainMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
+                </button>
+                {/* Live Badge */}
+                <div className="flex items-center gap-2 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                  <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                  2025 OBBBA
+                </div>
               </div>
             </div>
           </div>
